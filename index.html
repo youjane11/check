@@ -1,0 +1,53 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        function keyUpCreditNumber(event){
+            var cardType = $("#cardType").val();
+            if(cardType){
+                cardType = cardType.split(",")[1];
+            }
+            $("#cardNumber").attr("maxlength", Number(cardType));
+            var cardNumber = $("#cardNumber").val();
+            if(cardNumber.length>=6 && cardNumber.length<(Number(cardType)-4)){
+                $("#cardNumber").val(cardNumber.substr(0, cardNumber.length)+"X");
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+
+        function keyDownCreditNumber(event){
+            var pattern = /[^0123456789X]/;
+            if(pattern.test(event.key) && event.keyCode!=8 && event.keyCode!=116 && event.keyCode!=17){
+                event.preventDefault();
+                return false;
+            }
+        }
+
+        function changeCardType(){
+            $("#cardNumber").val("");
+        }
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>Credit Card Issuer : </td>
+            <td>
+                <select id="cardType" onchange="changeCardType()">
+                    <option value="mastercard,16">Master Card</option>
+                    <option value="visa,13">Visa</option>
+                    <option value="discovery,15">Discovery</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Credit Card : </td>
+            <td>           
+                <input id="cardNumber" onkeypress="return keyUpCreditNumber(event)" onkeydown="return keyDownCreditNumber(event)">
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
